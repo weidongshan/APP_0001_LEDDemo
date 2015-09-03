@@ -1,0 +1,53 @@
+[33mcommit 0acb10c909d4c17bda88a5adccda7922e2076e59[m
+Author: weidongshan <weidongshan@qq.com>
+Date:   Thu Sep 3 19:45:58 2015 +0800
+
+    use ILedService to access led
+
+[33mcommit ec30bcba47e874c02d82d4849b07b50d72551fe2[m
+Author: weidongshan <weidongshan@qq.com>
+Date:   Wed Aug 19 17:56:49 2015 +0800
+
+    v6, the so file calls open,ioctl,close
+
+[33mcommit 8abbe8f4e295422d0905adb29f50990a57261c90[m
+Author: weidongshan <weidongshan@qq.com>
+Date:   Tue Aug 18 19:50:08 2015 +0800
+
+    v5, call ledOpen,ledCtrl
+
+[33mcommit eeff0178e2525a5835c1a123891d57e638521ba7[m
+Author: weidongshan <weidongshan@qq.com>
+Date:   Tue Aug 18 18:55:01 2015 +0800
+
+    v4, add jni
+
+[33mcommit 36d631803da2fd620d39a437bf7cbe74fd38a4cc[m
+Author: weidongshan <weidongshan@qq.com>
+Date:   Tue Aug 18 12:01:17 2015 +0800
+
+    v3, add methords for button and checkbox
+
+[33mcommit f45b17e141fe0dd9bd2e57e8de58fd804ee4977b[m
+Author: weidongshan <weidongshan@qq.com>
+Date:   Tue Aug 18 10:05:51 2015 +0800
+
+    v2, add button and checkbox
+
+[33mcommit af50e2af4d7cf3af46d5b6e615e82d37555957f7[m
+Author: weidongshan <weidongshan@qq.com>
+Date:   Mon Aug 17 18:53:03 2015 +0800
+
+    v1, created by android studio
+
+[33mcommit 2c1f2636b2c089d8656a047793a2644a7d354f0c[m
+Author: weidongshan <weidongshan@qq.com>
+Date:   Mon Aug 17 16:22:11 2015 +0800
+
+    readme.txt -> utf8
+
+[33mcommit 4628dcca723bd84f57077498c39d21676dc199bd[m
+Author: weidongshan <weidongshan@qq.com>
+Date:   Mon Aug 17 16:19:34 2015 +0800
+
+    create ...
