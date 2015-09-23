@@ -9,8 +9,12 @@ import android.widget.Button;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.Toast;
-import android.os.ILedService;
-import android.os.ServiceManager;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+//import android.os.ILedService;
+//import android.os.ServiceManager;
+import android.os.IBinder;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,7 +24,10 @@ public class MainActivity extends AppCompatActivity {
     private CheckBox checkBoxLed2 = null;
     private CheckBox checkBoxLed3 = null;
     private CheckBox checkBoxLed4 = null;
-    private ILedService iLedService = null;
+    //private ILedService iLedService = null;
+
+    Object proxy = null;
+    Method ledCtrl = null;
 
     class MyButtonListener implements View.OnClickListener {
         @Override
@@ -35,8 +42,11 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
                     for (int i = 0; i < 4; i++)
-                        iLedService.ledCtrl(i, 1);
-                } catch (RemoteException e) {
+                        //iLedService.ledCtrl(i, 1);
+                        ledCtrl.invoke(proxy, i, 1);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
                     e.printStackTrace();
                 }
             }
@@ -49,8 +59,11 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
                     for (int i = 0; i < 4; i++)
-                        iLedService.ledCtrl(i, 0);
-                } catch (RemoteException e) {
+                        //iLedService.ledCtrl(i, 0);
+                        ledCtrl.invoke(proxy, i, 0);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
                     e.printStackTrace();
                 }
             }
@@ -68,24 +81,28 @@ public class MainActivity extends AppCompatActivity {
                     if (checked) {
                         // Put some meat on the sandwich
                         Toast.makeText(getApplicationContext(), "LED1 on", Toast.LENGTH_SHORT).show();
-                        iLedService.ledCtrl(0, 1);
+                        //iLedService.ledCtrl(0, 1);
+                        ledCtrl.invoke(proxy, 0, 1);
                     }
                     else {
                         // Remove the meat
                         Toast.makeText(getApplicationContext(), "LED1 off", Toast.LENGTH_SHORT).show();
-                        iLedService.ledCtrl(0, 0);
+                        //iLedService.ledCtrl(0, 0);
+                        ledCtrl.invoke(proxy, 0, 0);
                     }
                     break;
                 case R.id.LED2:
                     if (checked) {
                         // Put some meat on the sandwich
                         Toast.makeText(getApplicationContext(), "LED2 on", Toast.LENGTH_SHORT).show();
-                        iLedService.ledCtrl(1, 1);
+                        //iLedService.ledCtrl(1, 1);
+                        ledCtrl.invoke(proxy, 1, 1);
                     }
                     else {
                         // Remove the meat
                         Toast.makeText(getApplicationContext(), "LED2 off", Toast.LENGTH_SHORT).show();
-                        iLedService.ledCtrl(1, 0);
+                        //iLedService.ledCtrl(1, 0);
+                        ledCtrl.invoke(proxy, 1, 0);
                     }
                     break;
 
@@ -93,12 +110,14 @@ public class MainActivity extends AppCompatActivity {
                     if (checked) {
                         // Put some meat on the sandwich
                         Toast.makeText(getApplicationContext(), "LED3 on", Toast.LENGTH_SHORT).show();
-                        iLedService.ledCtrl(2, 1);
+                        //iLedService.ledCtrl(2, 1);
+                        ledCtrl.invoke(proxy, 2, 1);
                     }
                     else {
                         // Remove the meat
                         Toast.makeText(getApplicationContext(), "LED3 off", Toast.LENGTH_SHORT).show();
-                        iLedService.ledCtrl(2, 0);
+                        //iLedService.ledCtrl(2, 0);
+                        ledCtrl.invoke(proxy, 2, 0);
                     }
                     break;
 
@@ -106,17 +125,21 @@ public class MainActivity extends AppCompatActivity {
                     if (checked) {
                         // Put some meat on the sandwich
                         Toast.makeText(getApplicationContext(), "LED4 on", Toast.LENGTH_SHORT).show();
-                        iLedService.ledCtrl(3, 1);
+                        //iLedService.ledCtrl(3, 1);
+                        ledCtrl.invoke(proxy, 3, 1);
                     }
                     else {
                         // Remove the meat
                         Toast.makeText(getApplicationContext(), "LED4 off", Toast.LENGTH_SHORT).show();
-                        iLedService.ledCtrl(3, 0);
+                        //iLedService.ledCtrl(3, 0);
+                        ledCtrl.invoke(proxy, 3, 0);
                     }
                     break;
                 // TODO: Veggie sandwich
             }
-        } catch (RemoteException e) {
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
             e.printStackTrace();
         }
     }
@@ -127,8 +150,23 @@ public class MainActivity extends AppCompatActivity {
 
         button = (Button) findViewById(R.id.BUTTON);
 
-        iLedService = ILedService.Stub.asInterface(ServiceManager.getService("led"));
-        
+        try {
+            //iLedService = ILedService.Stub.asInterface(ServiceManager.getService("led"));
+            Method getService = Class.forName("android.os.ServiceManager").getMethod("getService", String.class);
+            Object ledService = getService.invoke(null, "led");
+            Method asInterface = Class.forName("android.os.ILedService$Stub").getMethod("asInterface", IBinder.class);
+            proxy = asInterface.invoke(null, ledService);
+            ledCtrl = Class.forName("android.os.ILedService$Stub$Proxy").getMethod("ledCtrl", int.class, int.class);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
         checkBoxLed1 = (CheckBox) findViewById(R.id.LED1);
         checkBoxLed2 = (CheckBox) findViewById(R.id.LED2);
         checkBoxLed3 = (CheckBox) findViewById(R.id.LED3);
